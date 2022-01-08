@@ -94,7 +94,7 @@ public:
         s += "\n\n    Total: "; s += std::to_string(Total);  
         s += "\n        HP: "; s += std::to_string(HP); 
         s += "\n        Attack: "; s += std::to_string(Attack);
-        s += "\n        Defence:; "; s += std::to_string(Defence); 
+        s += "\n        Defence: "; s += std::to_string(Defence); 
         s += "\n        Special Attack: "; s += std::to_string(Special_Attack); 
         s += "\n        Special Defence: "; s += std::to_string(Special_Defence); 
         s += "\n        Speed: "; s += std::to_string(Speed); s += "\n\n";
