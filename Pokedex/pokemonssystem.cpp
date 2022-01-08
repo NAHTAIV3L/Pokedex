@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <Windows.h>
 
 enum type
 {
@@ -125,6 +126,32 @@ uint8_t StringToType(std::string s)
     else { return NULL; }
 }
 
+void FormatAndPrintLine(std::string& s)
+{
+    std::stringstream strs(s);
+    std::string val;
+    std::vector<std::string> output;
+    while (std::getline(strs, val, ' '))
+    {
+        output.emplace_back(val);
+    }
+
+    pokemon p = { stoi(output[0]),
+                  output[1],
+                  StringToType(output[2]),
+                  StringToType(output[3]),
+                  stoi(output[4]),
+                  stoi(output[5]),
+                  stoi(output[6]),
+                  stoi(output[7]),
+                  stoi(output[8]),
+                  stoi(output[9]),
+                  stoi(output[10]),
+    };
+    std::cout << "\n" << p.str();
+}
+
+
 
 int main()
 {
@@ -153,29 +180,10 @@ int main()
                     auto entry_number = s.substr(0, s.find(" "));
                     if (entry_number == std::to_string(PokedexEntry))
                     {
-                        std::stringstream strs(s);
-                        std::string val;
-                        std::vector<std::string> output;
-                        while (std::getline(strs, val, ' '))
-                        {
-                            output.emplace_back(val);
-                        }
-
-                        pokemon p = { stoi(output[0]),
-                                      output[1],
-                                      StringToType(output[2]),
-                                      StringToType(output[3]),
-                                      stoi(output[4]),
-                                      stoi(output[5]),
-                                      stoi(output[6]),
-                                      stoi(output[7]),
-                                      stoi(output[8]),
-                                      stoi(output[9]),
-                                      stoi(output[10]),
-                        };
-                        std::cout << "\n" << p.str();
+                        FormatAndPrintLine(s);
                         break;
                     }
+                    else {}
                 }
             }
         }
@@ -198,30 +206,14 @@ int main()
 
                     if (found != std::string::npos)
                     {
-                        std::stringstream strs(s);
-                        std::string val;
-                        std::vector<std::string> output;
-                        while (std::getline(strs, val, ' '))
-                        {
-                            output.emplace_back(val);
-                        }
-                        pokemon p = { stoi(output[0]),
-                                      output[1],
-                                      StringToType(output[2]),
-                                      StringToType(output[3]),
-                                      stoi(output[4]),
-                                      stoi(output[5]),
-                                      stoi(output[6]),
-                                      stoi(output[7]),
-                                      stoi(output[8]),
-                                      stoi(output[9]),
-                                      stoi(output[10]),
-                        };
-                        std::cout << "\n" << p.str();
+                        FormatAndPrintLine(s);
                         PokemonNameFound = true;
                         break;
                     }
-                    PokemonNameFound = false;
+                    else
+                    {
+                        PokemonNameFound = false;
+                    }
                 }
             }
             if (!PokemonNameFound)
@@ -234,5 +226,7 @@ int main()
             break;
         }
     }
+    std::cout << "\n\n\n\n\n\n\n\n\t\t\t\t\tThank You For Using Pokedex";
+    Sleep(5000);
     return 0;
 }
