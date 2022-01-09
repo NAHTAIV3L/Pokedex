@@ -33,7 +33,7 @@ class pokemon
 {
 public:
 
-    uint8_t PokedexEntry = 0;
+    uint64_t PokedexEntry = 0;
 
     std::string Name = "You Idiot";
 
