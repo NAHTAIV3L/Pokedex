@@ -29,6 +29,29 @@ enum type
   Fairy
 };
 
+std::string TypeToString(const uint8_t& type)
+{
+    if (type == None) { return "None"; }
+    else if (type == Normal) { return "Normal"; }
+    else if (type == Fire) { return "Fire"; }
+    else if (type == Water) { return "Water"; }
+    else if (type == Grass) { return "Grass"; }
+    else if (type == Electric) { return "Electric"; }
+    else if (type == Ice) { return "Ice"; }
+    else if (type == Fighting) { return "Fighting"; }
+    else if (type == Poison) { return "Poison"; }
+    else if (type == Ground) { return "Ground"; }
+    else if (type == Flying) { return "Flying"; }
+    else if (type == Psychic) { return "Psychic"; }
+    else if (type == Bug) { return "Bug"; }
+    else if (type == Rock) { return "Rock"; }
+    else if (type == Ghost) { return "Ghost"; }
+    else if (type == Dark) { return "Dark"; }
+    else if (type == Dragon) { return "Dragon"; }
+    else if (type == Steel) { return "Steel"; }
+    else if (type == Fairy) { return "Fairy"; }
+}
+
 class pokemon
 {
 public:
@@ -52,45 +75,9 @@ public:
     {
         std::string s = (std::to_string(PokedexEntry) + ". " + Name);
         s += "\n\n    Type 1: ";
-        if (type1 == None) { s += "None"; }
-        else if (type1 == Normal) { s += "Normal"; }
-        else if (type1 == Fire) { s += "Fire"; }
-        else if (type1 == Water) { s += "Water"; }
-        else if (type1 == Grass) { s += "Grass"; }
-        else if (type1 == Electric) { s += "Electric"; }
-        else if (type1 == Ice) { s += "Ice"; }
-        else if (type1 == Fighting) { s += "Fighting"; }
-        else if (type1 == Poison) { s += "Poison"; }
-        else if (type1 == Ground) { s += "Ground"; }
-        else if (type1 == Flying) { s += "Flying"; }
-        else if (type1 == Psychic) { s += "Psychic"; }
-        else if (type1 == Bug) { s += "Bug"; }
-        else if (type1 == Rock) { s += "Rock"; }
-        else if (type1 == Ghost) { s += "Ghost"; }
-        else if (type1 == Dark) { s += "Dark"; }
-        else if (type1 == Dragon) { s += "Dragon"; }
-        else if (type1 == Steel) { s += "Steel"; }
-        else if (type1 == Fairy) { s += "Fairy"; }
-        s += ("\n    Type 2: ");
-        if (type2 == None) { s += "None"; }
-        else if (type2 == Normal) { s += "Normal"; }
-        else if (type2 == Fire) { s += "Fire"; }
-        else if (type2 == Water) { s += "Water"; }
-        else if (type2 == Grass) { s += "Grass"; }
-        else if (type2 == Electric) { s += "Electric"; }
-        else if (type2 == Ice) { s += "Ice"; }
-        else if (type2 == Fighting) { s += "Fighting"; }
-        else if (type2 == Poison) { s += "Poison"; }
-        else if (type2 == Ground) { s += "Ground"; }
-        else if (type2 == Flying) { s += "Flying"; }
-        else if (type2 == Psychic) { s += "Psychic"; }
-        else if (type2 == Bug) { s += "Bug"; }
-        else if (type2 == Rock) { s += "Rock"; }
-        else if (type2 == Ghost) { s += "Ghost"; }
-        else if (type2 == Dark) { s += "Dark"; }
-        else if (type2 == Dragon) { s += "Dragon"; }
-        else if (type2 == Steel) { s += "Steel"; }
-        else if (type2 == Fairy) { s += "Fairy"; }
+        s += TypeToString(type1);
+        s += "\n    Type 2: ";
+        s += TypeToString(type2);
         s += "\n\n    Total: "; s += std::to_string(Total);  
         s += "\n        HP: "; s += std::to_string(HP); 
         s += "\n        Attack: "; s += std::to_string(Attack);
@@ -102,7 +89,7 @@ public:
     }
 };
 
-uint8_t StringToType(std::string s)
+uint8_t StringToType(const std::string& s)
 {
     if (s == "Normal")        { return Normal; }
     else if (s == "Fire")     { return Fire; }
@@ -126,7 +113,7 @@ uint8_t StringToType(std::string s)
     else { return NULL; }
 }
 
-void FormatAndPrintLine(std::string& s)
+void FormatAndPrintLine(const std::string& s)
 {
     std::stringstream strs(s);
     std::string val;
