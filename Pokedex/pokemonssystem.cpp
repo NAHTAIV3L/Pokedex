@@ -155,6 +155,11 @@ void FormatAndPrintLine(std::string& s)
 
 int main()
 {
+    std::ifstream* file = new std::ifstream("Pokedex.pkdx");
+    auto lines = std::count(std::istreambuf_iterator<char>(*file), std::istreambuf_iterator<char>(), '\n');
+    delete file;
+    lines += 2;
+
     char TypeSearch;
     int PokedexEntry = 0;
     bool PokemonNameFound = true;
@@ -167,9 +172,9 @@ int main()
         std::system("cls");
         if (TypeSearch == 'e')
         {
-            std::cout << "(Must Be Lower than 252) Which Pokedex entry do you want: ";
+            std::cout << "(Must Be Lower than " << lines <<") Which Pokedex entry do you want: ";
             std::cin >> PokedexEntry;
-            std::fstream file("Pokedex.pkdx");
+            std::ifstream file("Pokedex.pkdx");
             if (file.is_open())
             {
                 while (!file.eof())
@@ -193,7 +198,7 @@ int main()
             std::cin >> PokemonName;
             std::transform(PokemonName.begin(), PokemonName.end(), PokemonName.begin(), tolower);
 
-            std::fstream file("Pokedex.pkdx");
+            std::ifstream file("Pokedex.pkdx");
             if (file.is_open())
             {
                 while (!file.eof())
