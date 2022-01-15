@@ -9,7 +9,7 @@
     #include <Windows.h>
     #define SLEEP Sleep(500)
     #define CLEAR std::system("cls")
-#elif __Linux__
+#elif __linux__
     #include <time.h>
     #define SLEEP sleep(0.5)
     #define CLEAR std::system("clear")
