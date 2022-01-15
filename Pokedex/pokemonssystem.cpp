@@ -12,59 +12,45 @@
     #pragma comment(lib, "urlmon.lib")
     #define SLEEP Sleep(500)
     #define CLEAR std::system("cls")
-    #define DOWNLOADFILE URLDownloadToFile(NULL, L"https://www.cheru.dev/Pokedex.pkdx", L"Pokedex.pkdx", BINDF_GETNEWESTVERSION, NULL)
+    #define DOWNLOADFILE URLDownloadToFile(NULL, L"https://www.cheru.dev/Pokedex.pkdx", L"Pokedex.pkdx", BINDF_GETNEWESTVERSION, NULL);
 #elif __linux__
     #include <unistd.h>
     #include <curl/curl.h> 
     #define SLEEP sleep(0.5)
     #define CLEAR std::system("clear")
-    #define DOWNLOADFILE CURL *curl; FILE* fp; CURLcode res; char* url = "https://www.cheru.dev/Pokedex.pkdx"; char outfilename[FILENAME_MAX] = "Pokedex.pkdx"; curl = curl_easy_init(); if (curl) { fp = fopen(outfilename, "wb"); curl_easy_setopt(curl, CURLOPT_URL, url); curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, NULL); curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp); res = curl_easy_perform(curl); curl_easy_cleanup(curl); fclose(fp) }
+    #define DOWNLOADFILE CURL *curl; FILE* fp; CURLcode res; char* url = "https://www.cheru.dev/Pokedex.pkdx"; char outfilename[FILENAME_MAX] = "Pokedex.pkdx"; curl = curl_easy_init(); if (curl) { fp = fopen(outfilename, "wb"); curl_easy_setopt(curl, CURLOPT_URL, url); curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, NULL); curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp); res = curl_easy_perform(curl); curl_easy_cleanup(curl); fclose(fp); }
 #endif
 
 enum type
 {
-  None = 0,
-  Normal,
-  Fire,
-  Water,
-  Grass,
-  Electric,
-  Ice,
-  Fighting,
-  Poison,
-  Ground,
-  Flying,
-  Psychic,
-  Bug,
-  Rock,
-  Ghost,
-  Dark,
-  Dragon,
-  Steel,
-  Fairy
+  None = 0, Normal, Fire, Water, Grass,
+  Electric, Ice, Fighting, Poison, Ground,
+  Flying, Psychic, Bug, Rock, Ghost,
+  Dark, Dragon, Steel, Fairy
 };
 
 std::string TypeToString(const uint8_t& type)
 {
-    if (type == None) { return "None"; }
-    else if (type == Normal) { return "Normal"; }
-    else if (type == Fire) { return "Fire"; }
-    else if (type == Water) { return "Water"; }
-    else if (type == Grass) { return "Grass"; }
+    if      (type == None    ) { return "None";     }
+    else if (type == Normal  ) { return "Normal";   }
+    else if (type == Fire    ) { return "Fire";     }
+    else if (type == Water   ) { return "Water";    }
+    else if (type == Grass   ) { return "Grass";    }
     else if (type == Electric) { return "Electric"; }
-    else if (type == Ice) { return "Ice"; }
+    else if (type == Ice     ) { return "Ice";      }
     else if (type == Fighting) { return "Fighting"; }
-    else if (type == Poison) { return "Poison"; }
-    else if (type == Ground) { return "Ground"; }
-    else if (type == Flying) { return "Flying"; }
-    else if (type == Psychic) { return "Psychic"; }
-    else if (type == Bug) { return "Bug"; }
-    else if (type == Rock) { return "Rock"; }
-    else if (type == Ghost) { return "Ghost"; }
-    else if (type == Dark) { return "Dark"; }
-    else if (type == Dragon) { return "Dragon"; }
-    else if (type == Steel) { return "Steel"; }
-    else if (type == Fairy) { return "Fairy"; }
+    else if (type == Poison  ) { return "Poison";   }
+    else if (type == Ground  ) { return "Ground";   }
+    else if (type == Flying  ) { return "Flying";   }
+    else if (type == Psychic ) { return "Psychic";  }
+    else if (type == Bug     ) { return "Bug";      }
+    else if (type == Rock    ) { return "Rock";     }
+    else if (type == Ghost   ) { return "Ghost";    }
+    else if (type == Dark    ) { return "Dark";     }
+    else if (type == Dragon  ) { return "Dragon";   }
+    else if (type == Steel   ) { return "Steel";    }
+    else if (type == Fairy   ) { return "Fairy";    }
+    else                       { return NULL;       }
 }
 
 class pokemon
@@ -90,7 +76,7 @@ public:
     {
         std::string s = (std::to_string(PokedexEntry) + ". " + Name);
         s += "\n\n    Type 1: ";            s += TypeToString(type1);
-        s += "\n    Type 2: ";              s += TypeToString(type2);
+        s +=   "\n    Type 2: ";            s += TypeToString(type2);
         s += "\n\n    Total: ";             s += std::to_string(Total);  
         s += "\n        HP: ";              s += std::to_string(HP); 
         s += "\n        Attack: ";          s += std::to_string(Attack);
@@ -105,26 +91,26 @@ public:
 
 uint8_t StringToType(const std::string& s)
 {
-    if (s == "Normal")        { return Normal; }
-    else if (s == "Fire")     { return Fire; }
-    else if (s == "Water")    { return Water; }
-    else if (s == "Grass")    { return Grass; }
+    if (s == "Normal"       ) { return Normal;   }
+    else if (s == "Fire"    ) { return Fire;     }
+    else if (s == "Water"   ) { return Water;    }
+    else if (s == "Grass"   ) { return Grass;    }
     else if (s == "Electric") { return Electric; }
-    else if (s == "Ice")      { return Ice; }
+    else if (s == "Ice"     ) { return Ice;      }
     else if (s == "Fighting") { return Fighting; }
-    else if (s == "Poison")   { return Poison; }
-    else if (s == "Ground")   { return Ground; }
-    else if (s == "Flying")   { return Flying; }
-    else if (s == "Psychic")  { return Psychic; }
-    else if (s == "Bug")      { return Bug; }
-    else if (s == "Rock")     { return Rock; }
-    else if (s == "Ghost")    { return Ghost; }
-    else if (s == "Dark")     { return Dark; }
-    else if (s == "Dragon")   { return Dragon; }
-    else if (s == "Steel")    { return Steel; }
-    else if (s == "Fairy")    { return Fairy; }
-    else if (s == "None")     { return None; }
-    else { return NULL; }
+    else if (s == "Poison"  ) { return Poison;   }
+    else if (s == "Ground"  ) { return Ground;   }
+    else if (s == "Flying"  ) { return Flying;   }
+    else if (s == "Psychic" ) { return Psychic;  }
+    else if (s == "Bug"     ) { return Bug;      }
+    else if (s == "Rock"    ) { return Rock;     }
+    else if (s == "Ghost"   ) { return Ghost;    }
+    else if (s == "Dark"    ) { return Dark;     }
+    else if (s == "Dragon"  ) { return Dragon;   }
+    else if (s == "Steel"   ) { return Steel;    }
+    else if (s == "Fairy"   ) { return Fairy;    }
+    else if (s == "None"    ) { return None;     }
+    else                      { return NULL;     }
 }
 
 void FormatAndPrintLine(const std::string& s)
@@ -159,7 +145,7 @@ int main()
     TestFile->open("Pokedex.pkdx");
     if (TestFile->fail())
     {
-        DOWNLOADFILE;
+        DOWNLOADFILE
     }
     else { }
     delete TestFile;
@@ -200,6 +186,7 @@ int main()
                     else {}
                 }
             }
+            file.close();
         }
         else if (TypeSearch == 'n')
         {
@@ -230,6 +217,7 @@ int main()
                     }
                 }
             }
+            file.close();
             if (!PokemonNameFound)
                 std::cout << "\n" << "Pokemon Name Not Found" << "\n\n";
             else
