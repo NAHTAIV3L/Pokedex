@@ -10,7 +10,7 @@
     #define SLEEP Sleep(500)
     #define CLEAR std::system("cls")
 #elif __linux__
-    #include <time.h>
+    #include <unistd.h>
     #define SLEEP sleep(0.5)
     #define CLEAR std::system("clear")
 #endif
@@ -83,17 +83,16 @@ public:
     std::string str()
     {
         std::string s = (std::to_string(PokedexEntry) + ". " + Name);
-        s += "\n\n    Type 1: ";
-        s += TypeToString(type1);
-        s += "\n    Type 2: ";
-        s += TypeToString(type2);
-        s += "\n\n    Total: "; s += std::to_string(Total);  
-        s += "\n        HP: "; s += std::to_string(HP); 
-        s += "\n        Attack: "; s += std::to_string(Attack);
-        s += "\n        Defence: "; s += std::to_string(Defence); 
-        s += "\n        Special Attack: "; s += std::to_string(Special_Attack); 
+        s += "\n\n    Type 1: ";            s += TypeToString(type1);
+        s += "\n    Type 2: ";              s += TypeToString(type2);
+        s += "\n\n    Total: ";             s += std::to_string(Total);  
+        s += "\n        HP: ";              s += std::to_string(HP); 
+        s += "\n        Attack: ";          s += std::to_string(Attack);
+        s += "\n        Defence: ";         s += std::to_string(Defence); 
+        s += "\n        Special Attack: ";  s += std::to_string(Special_Attack); 
         s += "\n        Special Defence: "; s += std::to_string(Special_Defence); 
-        s += "\n        Speed: "; s += std::to_string(Speed); s += "\n\n";
+        s += "\n        Speed: ";           s += std::to_string(Speed); 
+        s += "\n\n";
         return s;
     }
 };
@@ -168,7 +167,7 @@ int main()
         CLEAR;
         if (TypeSearch == 'e')
         {
-            std::cout << "(Must Be Lower than " << lines <<") Which Pokedex entry do you want: ";
+            std::cout << "(Must be a number and lower than " << lines <<") Which Pokedex entry do you want: ";
             std::cin >> PokedexEntry;
             std::ifstream file("Pokedex.pkdx");
             if (file.is_open())
