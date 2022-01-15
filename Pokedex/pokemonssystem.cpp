@@ -5,14 +5,20 @@
 #include <sstream>
 #include <vector>
 
+
 #ifdef _WIN32
     #include <Windows.h>
+    #include <urlmon.h>
+    #pragma comment(lib, "urlmon.lib")
     #define SLEEP Sleep(500)
     #define CLEAR std::system("cls")
+    #define DOWNLOADFILE URLDownloadToFile(NULL, L"https://www.cheru.dev/Pokedex.pkdx", L"Pokedex.pkdx", BINDF_GETNEWESTVERSION, NULL)
 #elif __linux__
     #include <unistd.h>
+    #include <curl/curl.h> 
     #define SLEEP sleep(0.5)
     #define CLEAR std::system("clear")
+    #define DOWNLOADFILE CURL *curl; FILE* fp; CURLcode res; char* url = "https://www.cheru.dev/Pokedex.pkdx"; char outfilename[FILENAME_MAX] = "Pokedex.pkdx"; curl = curl_easy_init(); if (curl) { fp = fopen(outfilename, "wb"); curl_easy_setopt(curl, CURLOPT_URL, url); curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, NULL); curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp); res = curl_easy_perform(curl); curl_easy_cleanup(curl); fclose(fp) }
 #endif
 
 enum type
@@ -147,9 +153,17 @@ void FormatAndPrintLine(const std::string& s)
 }
 
 
-
 int main()
 {
+    std::ifstream* TestFile = new std::ifstream();
+    TestFile->open("Pokedex.pkdx");
+    if (TestFile->fail())
+    {
+        DOWNLOADFILE;
+    }
+    else { }
+    delete TestFile;
+
     std::ifstream* file = new std::ifstream("Pokedex.pkdx");
     auto lines = std::count(std::istreambuf_iterator<char>(*file), std::istreambuf_iterator<char>(), '\n');
     delete file;
