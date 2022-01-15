@@ -4,7 +4,16 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
-#include <Windows.h>
+
+#ifdef _WIN32
+    #include <Windows.h>
+    #define SLEEP Sleep(500)
+    #define CLEAR std::system("cls")
+#elif __Linux__
+    #include <time.h>
+    #define SLEEP sleep(0.5)
+    #define CLEAR std::system("clear")
+#endif
 
 enum type
 {
@@ -156,7 +165,7 @@ int main()
         std::cout << "Pokedex Entry(e) Name(n) Quit(q) \nWhat Type of Searching Do You Want To Do: ";
         std::cin >> TypeSearch;
         TypeSearch = tolower(TypeSearch);
-        std::system("cls");
+        CLEAR;
         if (TypeSearch == 'e')
         {
             std::cout << "(Must Be Lower than " << lines <<") Which Pokedex entry do you want: ";
@@ -219,6 +228,6 @@ int main()
         }
     }
     std::cout << "\n\n\n\n\n\n\n\n\t\t\t\t\tThank You For Using Pokedex";
-    Sleep(5000);
+    SLEEP;
     return 0;
 }
