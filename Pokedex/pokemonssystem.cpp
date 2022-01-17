@@ -4,22 +4,55 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <thread>
 
+std::atomic<bool> IsRunning = true;
 
 #ifdef _WIN32
     #include <Windows.h>
     #include <urlmon.h>
     #pragma comment(lib, "urlmon.lib")
-    #define SLEEP Sleep(500)
+    #define SLEEP(x) Sleep(x)
     #define CLEAR std::system("cls")
-    #define DOWNLOADFILE URLDownloadToFile(NULL, L"https://www.cheru.dev/Pokedex.pkdx", L"Pokedex.pkdx", BINDF_GETNEWESTVERSION, NULL);
 #elif __linux__
     #include <unistd.h>
     #include <curl/curl.h> 
-    #define SLEEP sleep(0.5)
+    #define SLEEP(x) sleep((x / 1000))
     #define CLEAR std::system("clear")
-    #define DOWNLOADFILE CURL *curl; FILE* fp; CURLcode res; char* url = "https://www.cheru.dev/Pokedex.pkdx"; char outfilename[FILENAME_MAX] = "Pokedex.pkdx"; curl = curl_easy_init(); if (curl) { fp = fopen(outfilename, "wb"); curl_easy_setopt(curl, CURLOPT_URL, url); curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, NULL); curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp); res = curl_easy_perform(curl); curl_easy_cleanup(curl); fclose(fp); }
 #endif
+
+void PinWheel()
+{
+    std::cout << "/";  SLEEP(1); CLEAR; 
+    std::cout << "-";  SLEEP(1); CLEAR;
+    std::cout << "\\"; SLEEP(1); CLEAR;
+    std::cout << "|";  SLEEP(1); CLEAR;
+}
+
+void DownloadFile()
+{
+#ifdef _WIN32
+    URLDownloadToFile(NULL, L"https://www.cheru.dev/Pokedex.pkdx", L"Pokedex.pkdx", BINDF_GETNEWESTVERSION, NULL);
+#elif __linux__
+    CURL* curl; 
+    FILE* fp; 
+    CURLcode res; 
+    char* url = "https://www.cheru.dev/Pokedex.pkdx"; 
+    char outfilename[FILENAME_MAX] = "Pokedex.pkdx"; 
+    curl = curl_easy_init(); 
+    if (curl) 
+    { 
+        fp = fopen(outfilename, "wb"); 
+        curl_easy_setopt(curl, CURLOPT_URL, url); 
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, NULL); 
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp); 
+        res = curl_easy_perform(curl); 
+        curl_easy_cleanup(curl); 
+        fclose(fp); 
+    }
+#endif
+    IsRunning = false;
+}
 
 enum type
 {
@@ -50,7 +83,7 @@ std::string TypeToString(const uint8_t& type)
     else if (type == Dragon  ) { return "Dragon";   }
     else if (type == Steel   ) { return "Steel";    }
     else if (type == Fairy   ) { return "Fairy";    }
-    else                       { return NULL;       }
+    else                       { return "Error";    }
 }
 
 class pokemon
@@ -123,29 +156,36 @@ void FormatAndPrintLine(const std::string& s)
         output.emplace_back(val);
     }
 
-    pokemon p = { stoi(output[0]),
+    pokemon p = { (uint64_t)stoi(output[0]),
                   output[1],
                   StringToType(output[2]),
                   StringToType(output[3]),
-                  stoi(output[4]),
-                  stoi(output[5]),
-                  stoi(output[6]),
-                  stoi(output[7]),
-                  stoi(output[8]),
-                  stoi(output[9]),
-                  stoi(output[10]),
+                  (uint32_t)stoi(output[4]),
+                  (uint8_t)stoi(output[5]),
+                  (uint8_t)stoi(output[6]),
+                  (uint8_t)stoi(output[7]),
+                  (uint8_t)stoi(output[8]),
+                  (uint8_t)stoi(output[9]),
+                  (uint8_t)stoi(output[10]),
     };
     std::cout << "\n" << p.str();
 }
+
+
 
 
 int main()
 {
     std::ifstream* TestFile = new std::ifstream();
     TestFile->open("Pokedex.pkdx");
-    if (TestFile->fail())
+    if (TestFile->fail() && !(TestFile->bad()))
     {
-        DOWNLOADFILE
+        std::thread t(&DownloadFile);
+        while (IsRunning)
+        {
+            PinWheel();
+        }
+        t.join();
     }
     else { }
     delete TestFile;
@@ -229,6 +269,6 @@ int main()
         }
     }
     std::cout << "\n\n\n\n\n\n\n\n\t\t\t\t\tThank You For Using Pokedex";
-    SLEEP;
+    SLEEP(500);
     return 0;
 }
