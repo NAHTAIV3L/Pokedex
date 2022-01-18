@@ -35,7 +35,7 @@ void DownloadFile()
     CURL* curl; 
     FILE* fp; 
     CURLcode res; 
-    const char* url = "https://www.cheru.dev/Pokedex.pkdx.hash"; 
+    const char* url = "https://www.cheru.dev/Pokedex.pkdx"; 
     char outfilename[FILENAME_MAX] = "Pokedex.pkdx"; 
     curl = curl_easy_init(); 
     if (curl) 
