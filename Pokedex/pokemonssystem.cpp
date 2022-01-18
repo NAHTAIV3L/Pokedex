@@ -209,9 +209,7 @@ int main()
         std::string WebHash = GetHash();
 
         std::ifstream file("Pokedex.pkdx");
-        std::stringstream buffer;
-        buffer << file.rdbuf();
-        std::string string = buffer.str();
+        std::string string((std::istreambuf_iterator<char>(file)), (std::istreambuf_iterator<char>()));
         
         SHA1 Hash;
         Hash.update(string);
