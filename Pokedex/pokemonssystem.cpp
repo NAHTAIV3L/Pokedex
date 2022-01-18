@@ -209,7 +209,8 @@ int main()
         std::string WebHash = GetHash();
 
         std::ifstream file("Pokedex.pkdx");
-        std::string string = " ";
+        std::string string;
+        string[0] = file.get();
 
         while (!file.eof())
         {
