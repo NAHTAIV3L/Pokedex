@@ -35,7 +35,7 @@ void DownloadFile()
     CURL* curl; 
     FILE* fp; 
     CURLcode res; 
-    const char* url = "https://www.cheru.dev/Pokedex.pkdx"; 
+    const char* url = "https://www.cheru.dev/Pokedex.pkdx.hash"; 
     char outfilename[FILENAME_MAX] = "Pokedex.pkdx"; 
     curl = curl_easy_init(); 
     if (curl) 
@@ -64,7 +64,7 @@ std::string GetHash()
 
     curl = curl_easy_init();
     if (curl) {
-        curl_easy_setopt(curl, CURLOPT_URL, "http://www.google.com");
+        curl_easy_setopt(curl, CURLOPT_URL, "https://www.cheru.dev/Pokedex.pkdx.hash");
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
         res = curl_easy_perform(curl);
