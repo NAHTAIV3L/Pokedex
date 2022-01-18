@@ -178,6 +178,8 @@ void FormatAndPrintLine(const std::string& s)
         output.emplace_back(val);
     }
 
+    output[1][0] = toupper(output[1][0]);
+
     pokemon p = { (uint64_t)stoi(output[0]),
                   output[1],
                   StringToType(output[2]),
