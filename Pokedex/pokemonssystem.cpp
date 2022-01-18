@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <string>
 #include <iostream>
 #include <algorithm>
@@ -5,39 +6,36 @@
 #include <sstream>
 #include <vector>
 #include <thread>
-
-std::atomic<bool> IsRunning = true;
+#include <stdio.h>
+#include "sha1.h"
 
 #ifdef _WIN32
+    #define CURL_STATICLIB
     #include <Windows.h>
-    #include <urlmon.h>
-    #pragma comment(lib, "urlmon.lib")
+    #include <curl/Win32/curl.h>
+    #include <curl/Win32/easy.h>
+    #pragma comment(lib, "libcurl.lib")
+    #pragma comment(lib, "Normaliz.lib")
+    #pragma comment(lib, "Ws2_32.lib")
+    #pragma comment(lib, "Wldap32.lib")
+    #pragma comment(lib, "Crypt32.lib")
+    #pragma comment(lib, "advapi32.lib")
     #define SLEEP(x) Sleep(x)
     #define CLEAR std::system("cls")
 #elif __linux__
+    #include <curl/curl.h>
+    #include <curl/easy.h>
     #include <unistd.h>
-    #include <curl/curl.h> 
     #define SLEEP(x) sleep((x / 1000))
     #define CLEAR std::system("clear")
 #endif
 
-void PinWheel()
-{
-    std::cout << "/";  SLEEP(1); CLEAR; 
-    std::cout << "-";  SLEEP(1); CLEAR;
-    std::cout << "\\"; SLEEP(1); CLEAR;
-    std::cout << "|";  SLEEP(1); CLEAR;
-}
-
 void DownloadFile()
 {
-#ifdef _WIN32
-    URLDownloadToFile(NULL, L"https://www.cheru.dev/Pokedex.pkdx", L"Pokedex.pkdx", BINDF_GETNEWESTVERSION, NULL);
-#elif __linux__
     CURL* curl; 
     FILE* fp; 
     CURLcode res; 
-    char* url = "https://www.cheru.dev/Pokedex.pkdx"; 
+    const char* url = "https://www.cheru.dev/Pokedex.pkdx"; 
     char outfilename[FILENAME_MAX] = "Pokedex.pkdx"; 
     curl = curl_easy_init(); 
     if (curl) 
@@ -50,8 +48,32 @@ void DownloadFile()
         curl_easy_cleanup(curl); 
         fclose(fp); 
     }
-#endif
-    IsRunning = false;
+}
+
+size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* userp)
+{
+    ((std::string*)userp)->append((char*)contents, size * nmemb);
+    return size * nmemb;
+}
+
+std::string GetHash()
+{
+    CURL* curl;
+    CURLcode res;
+    std::string readBuffer;
+
+    curl = curl_easy_init();
+    if (curl) {
+        curl_easy_setopt(curl, CURLOPT_URL, "http://www.google.com");
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+        res = curl_easy_perform(curl);
+        curl_easy_cleanup(curl);
+
+        return readBuffer;
+    }
+    else
+        return "Error";
 }
 
 enum type
@@ -180,14 +202,34 @@ int main()
     TestFile->open("Pokedex.pkdx");
     if (TestFile->fail() && !(TestFile->bad()))
     {
-        std::thread t(&DownloadFile);
-        while (IsRunning)
-        {
-            PinWheel();
-        }
-        t.join();
+        DownloadFile();
     }
-    else { }
+    else 
+    { 
+        std::string WebHash = GetHash();
+
+        std::ifstream file("Pokedex.pkdx");
+        std::string string = " ";
+
+        while (!file.eof())
+        {
+            string += file.get();
+        }
+        
+        SHA1 Hash;
+        Hash.update(string);
+        std::string FileHash = Hash.final();
+
+        if (FileHash != WebHash)
+        {
+            std::remove("Pokedex.pkdx");
+            DownloadFile();
+        }
+        else
+        {
+
+        }
+    }
     delete TestFile;
 
     std::ifstream* file = new std::ifstream("Pokedex.pkdx");
