@@ -9,6 +9,10 @@
 #include <stdio.h>
 #include "sha1.h"
 
+#define POKEDEXWEBSITE "https://nahtaiv3l.github.io/nahtiv3l.github.io/Pokedex.pkdx"
+#define HASHWEBSITE "https://nahtaiv3l.github.io/nahtiv3l.github.io/Pokedex.pkdx.hash"
+
+
 #ifdef _WIN32
     #define CURL_STATICLIB
     #include <Windows.h>
@@ -35,7 +39,7 @@ void DownloadFile()
     CURL* curl; 
     FILE* fp; 
     CURLcode res; 
-    const char* url = "https://www.cheru.dev/Pokedex.pkdx"; 
+    const char* url = POKEDEXWEBSITE; 
     char outfilename[FILENAME_MAX] = "Pokedex.pkdx"; 
     curl = curl_easy_init(); 
     if (curl) 
@@ -64,7 +68,7 @@ std::string GetHash()
 
     curl = curl_easy_init();
     if (curl) {
-        curl_easy_setopt(curl, CURLOPT_URL, "https://www.cheru.dev/Pokedex.pkdx.hash");
+        curl_easy_setopt(curl, CURLOPT_URL, HASHWEBSITE);
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
         res = curl_easy_perform(curl);
